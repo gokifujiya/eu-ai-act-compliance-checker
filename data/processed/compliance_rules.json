@@ -1,0 +1,693 @@
+{
+    "E1": {
+      "section": "Entity",
+      "question": "Which kind of entity is your organisation?",
+      "type": "single_choice",
+      "options": {
+        "provider": {
+          "label": "Provider",
+          "obligations": ["AI Literacy"],
+          "next": "E2"
+        },
+        "deployer": {
+          "label": "Deployer",
+          "obligations": ["AI Literacy"],
+          "next": "E2"
+        },
+        "distributor": {
+          "label": "Distributor",
+          "next": "E2"
+        },
+        "importer": {
+          "label": "Importer",
+          "next": "E2"
+        },
+        "product_manufacturer": {
+          "label": "Product Manufacturer",
+          "next": "E3"
+        },
+        "authorised_representative": {
+          "label": "Authorised Representative",
+          "obligations": ["Authorised Representative"],
+          "next": "END"
+        }
+      },
+      "legal_basis": [
+        "Article 3 points 2-8",
+        "Recital 87"
+      ]
+    },
+  
+    "E2": {
+      "section": "Entity",
+      "question": "Do you (or a downstream deployer, distributor, or importer) make any of the following modifications to the AI system?",
+      "type": "multiple_choice",
+      "options": {
+        "different_name_or_trademark": {
+        "label": "Putting a different name or trademark on the system",
+        "status_changes": ["Become a Provider"],
+        "next": "HR1"
+        },
+        "modified_intended_purpose": {
+        "label": "Modifying the intended purpose of a system already in operation",
+        "status_changes": ["Become a Provider"],
+        "next": "HR1"
+        },
+        "substantial_modification": {
+        "label": "Performing a substantial modification to the system",
+        "status_changes": ["Become a Provider"],
+        "next": "HR1"
+        },
+        "none": {
+        "label": "None of the above",
+        "next": "HR1"
+        }   
+      },
+      "legal_basis": [
+        "Article 25 points 1-2",
+        "Article 3 point 23"
+      ]
+    },
+
+    "E3": {
+        "section": "Entity",
+        "question": "Does your product integrate an AI system AND meet either of the following criteria?",
+        "type": "multiple_choice",
+        "options": {
+            "marketed_with_product": {
+                "label": "The AI system was or will be placed on the market together with my product under my manufacturer name or trademark",
+                "next": "HR6"
+            },
+            "put_into_service_after_product": {
+                "label": "The AI system was or will be put into service under my manufacturer name or trademark after my product has been placed on the market",
+                "next": "HR6"
+            },
+            "none": {
+                "label": "None of the above",
+                "status_changes": [
+                    "Out of scope"
+                ],
+                "next": "END"
+            }
+        },
+        "legal_basis": [
+            "Article 25 point 3",
+            "Annex I"
+        ],
+        "guidance": [
+            "This applies only if the product is placed on the market or put into service within the EU, regardless of whether or not the product manufacturer is established within the EU."
+        ]
+    },
+  
+    "HR1": {
+      "section": "High Risk Status",
+      "question": "Does your AI system fall within any of the following high-risk categories? (Annex I, Section B)",
+      "type": "multiple_choice",
+      "options": {
+        "civil_aviation_security": {
+          "label": "Civil aviation security"
+        },
+        "two_three_wheel_vehicles": {
+          "label": "Two- or three-wheel vehicles and quadricycles"
+        },
+        "agricultural_forestry_vehicles": {
+          "label": "Agricultural and forestry vehicles"
+        },
+        "marine_equipment": {
+          "label": "Marine equipment"
+        },
+        "rail_interoperability": {
+          "label": "Interoperability of the rail systems"
+        },
+        "motor_vehicles_trailers": {
+          "label": "Motor vehicles and their trailers"
+        },
+        "civil_aviation": {
+          "label": "Civil aviation"
+        },
+        "none": {
+          "label": "None of the above",
+          "next": "HR2"
+        }
+      },
+      "legal_basis": [
+        "Article 6 point 1",
+        "Annex I Section B"
+      ]
+    },
+
+    "HR2": {
+        "section": "High Risk Status",
+        "question": "Does your AI system fall within any of the following high-risk categories? (Annex I, Section A)",
+        "type": "multiple_choice",
+        "options": {
+            "machinery": {
+                "label": "Machinery",
+                "next": "HR3"
+            },
+            "toys": {
+                "label": "Toys",
+                "next": "HR3"
+            },
+            "recreational_craft": {
+                "label": "Recreational craft and personal watercraft",
+                "next": "HR3"
+            },
+            "lifts": {
+                "label": "Lifts and safety components of lifts",
+                "next": "HR3"
+            },
+            "explosive_atmospheres": {
+                "label": "Equipment and protective systems intended for use in potentially explosive atmospheres",
+                "next": "HR3"
+            },
+            "radio_equipment": {
+                "label": "Radio equipment",
+                "next": "HR3"
+            },
+            "pressure_equipment": {
+                "label": "Pressure equipment",
+                "next": "HR3"
+            },
+            "cableway_installations": {
+                "label": "Cableway installations",
+                "next": "HR3"
+            },
+            "personal_protective_equipment": {
+                "label": "Personal protective equipment",
+                "next": "HR3"
+            },
+            "gas_appliances": {
+                "label": "Appliances burning gaseous fuels",
+                "next": "HR3"
+            },
+            "medical_devices": {
+                "label": "Medical devices",
+                "next": "HR3"
+            },
+            "in_vitro_diagnostic_medical_devices": {
+                "label": "In vitro diagnostic medical devices",
+                "next": "HR3"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "HR4"
+            }
+        },
+        "legal_basis": [
+            "Article 6 point 1",
+            "Annex I Section A"
+        ]
+    },
+
+    "HR3": {
+        "section": "High Risk Status",
+        "question": "Is the product, or the product whose safety component is the AI system, required to undergo a third-party conformity assessment?",
+        "type": "single_choice",
+        "options": {
+            "yes": {
+                "label": "Yes",
+                "status_changes": [
+                    "High risk"
+                ],
+                "next": "S1"
+            },
+            "no": {
+                "label": "No",
+                "next": "HR4"
+            }
+        },
+        "legal_basis": [
+            "Article 6 point 1"
+        ]
+    },
+
+    "HR4": {
+        "section": "High Risk Status",
+        "question": "Does your AI system fall within any of the following high-risk categories? (Annex III)",
+        "type": "multiple_choice",
+        "options": {
+            "biometrics": {
+                "label": "Biometrics",
+                "next": "HR5"
+            },
+            "critical_infrastructure": {
+                "label": "Critical infrastructure",
+                "next": "HR5"
+            },
+            "education_vocational_training": {
+                "label": "Education and vocational training",
+                "next": "HR5"
+            },
+            "employment_workers_self_employment": {
+                "label": "Employment, workers management and access to self-employment",
+                "next": "HR5"
+            },
+            "essential_services_benefits": {
+                "label": "Access to and enjoyment of essential private services and essential public services and benefits",
+                "next": "HR5"
+            },
+            "law_enforcement": {
+                "label": "Law enforcement",
+                "next": "HR5"
+            },
+            "migration_asylum_border_control": {
+                "label": "Migration, asylum and border control management",
+                "next": "HR5"
+            },
+            "justice_democratic_processes": {
+                "label": "Administration of justice and democratic processes",
+                "next": "HR5"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "S1"
+            }
+        },
+        "legal_basis": [
+            "Article 6 point 2",
+            "Annex III"
+        ]
+    },
+
+    "HR5": {
+        "section": "High Risk Status",
+        "question": "Does your AI system pose a significant risk of harm to the health, safety or fundamental rights of any person?",
+        "type": "single_choice",
+        "options": {
+            "yes": {
+                "label": "Yes",
+                "status_changes": [
+                    "High risk"
+                ],
+                "next": "S1"
+            },
+            "no": {
+                "label": "No",
+                "obligations": [
+                    "Notify NCA"
+                ],
+                "next": "S1"
+            }
+        },
+        "legal_basis": [
+            "Article 6 point 3"
+        ],
+        "guidance": [
+            "The system does not pose a significant risk if it is intended to perform a narrow procedural task.",
+            "The system does not pose a significant risk if it is intended to improve the result of a previously completed human activity.",
+            "The system does not pose a significant risk if it is intended to detect decision-making patterns or deviations from prior decision-making patterns and is not meant to replace or influence the previously completed human assessment without proper human review.",
+            "The system does not pose a significant risk if it is intended to perform a preparatory task to an assessment relevant for the purposes of the use cases listed in Annex III.",
+            "If the system performs profiling of natural persons, select Yes."
+        ]
+    },
+
+    "HR6": {
+        "section": "High Risk Status",
+        "question": "Does your product include an AI system as a 'safety component' AND fall within any of the following categories?",
+        "type": "multiple_choice",
+        "options": {
+            "machinery": {
+                "label": "Machinery",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "toys": {
+                "label": "Toys",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "recreational_craft": {
+                "label": "Recreational craft and personal watercraft",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "lifts": {
+                "label": "Lifts and safety components of lifts",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "explosive_atmospheres": {
+                "label": "Equipment and protective systems intended for use in potentially explosive atmospheres",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "radio_equipment": {
+                "label": "Radio equipment",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "pressure_equipment": {
+                "label": "Pressure equipment",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "cableway_installations": {
+                "label": "Cableway installations",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "personal_protective_equipment": {
+                "label": "Personal protective equipment",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "gas_appliances": {
+                "label": "Appliances burning gaseous fuels",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "medical_devices": {
+                "label": "Medical devices",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "in_vitro_diagnostic_medical_devices": {
+                "label": "In vitro diagnostic medical devices",
+                "status_changes": [
+                    "High risk",
+                    "Become a Provider"
+                ],
+                "next": "S1"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "END"
+            }
+        },
+        "legal_basis": [
+            "Article 6 point 3",
+            "Article 3 point 14"
+        ],
+        "guidance": [
+            "Safety component: A component of a product or of a system which fulfils a safety function for that product or system, or the failure or malfunctioning of which endangers the health and safety of persons or property."
+        ]
+    },
+
+    "S1": {
+        "section": "Scope",
+        "question": "Do you meet any of the following criteria?",
+        "type": "multiple_choice",
+        "options": {
+            "ai_system_eu_market": {
+                "label": "I am placing on the market or putting into service AI systems in the EU",
+                "applies_to": [
+                    "provider"
+                ]
+            },
+            "gpai_eu_market": {
+                "label": "I am placing on the market General Purpose AI models in the EU",
+                "applies_to": [
+                    "provider"
+                ],
+                "next": "R1"
+            },
+            "deployer_established_eu": {
+                "label": "I am established or located within the EU",
+                "applies_to": [
+                    "deployer"
+                ]
+            },
+            "importer_established_eu": {
+                "label": "I am established or located within the EU, and I am placing on the market an AI system that bears the name or trademark of somebody established outside of the EU",
+                "applies_to": [
+                    "importer"
+                ]
+            },
+            "output_used_eu": {
+                "label": "My AI system's output is used in the EU",
+                "applies_to": [
+                    "provider",
+                    "deployer",
+                    "distributor"
+                ]
+            },
+            "none": {
+                "label": "None of the above",
+                "status_changes": [
+                    "Out of scope"
+                ],
+                "next": "END"
+            }
+        },
+        "legal_basis": [
+            "Article 2"
+        ]
+    },
+
+    "R1": {
+        "section": "Rules",
+        "question": "Does your General Purpose AI model meet any of the following criteria?",
+        "type": "multiple_choice",
+        "options": {
+            "high_impact_capabilities": {
+                "label": "It has high-impact capabilities evaluated on the basis of appropriate technical tools and methodologies, including indicators and benchmarks",
+                "status_changes": [
+                    "GPAI with systemic risk"
+                ],
+                "next": "R2"
+            },
+            "compute_threshold": {
+                "label": "The cumulative amount of computation used for its training measured in floating point operations is greater than 10^25 FLOPs",
+                "status_changes": [
+                    "GPAI with systemic risk"
+                ],
+                "next": "R2"
+            },
+            "commission_decision": {
+                "label": "The European Commission has decided that the model has capabilities or impact equivalent to those described above",
+                "status_changes": [
+                    "GPAI with systemic risk"
+                ],
+                "next": "R2"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "R2"
+            }
+        },
+        "legal_basis": [
+            "Article 51"
+        ]
+    },
+
+    "R2": {
+        "section": "Rules",
+        "question": "Do any of the following exclusions apply to your AI system or model?",
+        "type": "multiple_choice",
+        "options": {
+            "military_defence_national_security": {
+                "label": "The AI system is intended to be used exclusively for military, defence or national security purposes",
+                "status_changes": [
+                    "Exception"
+                ],
+                "next": "END"
+            },
+            "third_country_public_authority": {
+                "label": "The AI system is used by a public authority in a third country or by an international organisation under an international cooperation or law-enforcement agreement with the EU or a Member State, with adequate safeguards for fundamental rights and freedoms",
+                "status_changes": [
+                    "Exception"
+                ],
+                "next": "END"
+            },
+            "scientific_research_development": {
+                "label": "The AI system or model is specifically developed and put into service for the sole purpose of scientific research and development",
+                "status_changes": [
+                    "Exception"
+                ],
+                "next": "END"
+            },
+            "research_testing_before_market": {
+                "label": "The activity concerns research, testing or development regarding AI systems or models before they are placed on the market or put into service, excluding testing in real-world conditions",
+                "status_changes": [
+                    "Exception"
+                ],
+                "next": "END"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "R3"
+            }
+        },
+        "legal_basis": [
+            "Article 2"
+        ]
+    },
+
+    "R3": {
+        "section": "Rules",
+        "question": "Does your AI system fall within any of the following prohibited AI practice categories?",
+        "type": "multiple_choice",
+        "options": {
+            "subliminal_manipulative_deceptive": {
+                "label": "Subliminal, manipulative or deceptive techniques",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "exploitation_vulnerabilities": {
+                "label": "Exploitation of vulnerabilities",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "social_scoring": {
+                "label": "Social scoring",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "criminal_risk_assessment": {
+                "label": "Assessment or prediction of the risk of a natural person committing a criminal offence",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "facial_recognition_databases": {
+                "label": "Creating or expanding facial recognition databases through untargeted scraping of facial images from the internet or CCTV footage",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "emotion_inference": {
+                "label": "Inferring emotions in the workplace or educational institutions",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "biometric_categorisation": {
+                "label": "Biometric categorisation according to certain sensitive or protected characteristics",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "real_time_remote_biometric_identification": {
+                "label": "Real-time remote biometric identification in publicly accessible spaces for law-enforcement purposes",
+                "status_changes": [
+                    "Prohibited AI Practice"
+                ],
+                "next": "END"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "R4"
+            }
+        },
+        "legal_basis": [
+            "Article 5"
+        ]
+    },
+
+    "R4": {
+        "section": "Rules",
+        "question": "Does your AI system fall within any of the following transparency categories?",
+        "type": "multiple_choice",
+        "options": {
+            "direct_interaction": {
+                "label": "The AI system is intended to interact directly with natural persons",
+                "obligations": [
+                    "Transparency"
+                ],
+                "next": "R5"
+            },
+            "synthetic_content": {
+                "label": "The AI system generates synthetic audio, image, video or text content",
+                "obligations": [
+                    "Transparency"
+                ],
+                "next": "R5"
+            },
+            "emotion_or_biometric": {
+                "label": "The AI system performs emotion recognition or biometric categorisation",
+                "obligations": [
+                    "Transparency"
+                ],
+                "next": "R5"
+            },
+            "deepfake_or_public_interest_text": {
+                "label": "The AI system generates or manipulates image, audio or video content constituting a deep fake, or generates or manipulates text published for the purpose of informing the public on matters of public interest",
+                "obligations": [
+                    "Transparency"
+                ],
+                "next": "R5"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "R5"
+            }
+        },
+        "legal_basis": [
+            "Article 50"
+        ]
+    },
+
+    "R5": {
+        "section": "Rules",
+        "question": "Do you meet any of the following criteria?",
+        "type": "multiple_choice",
+        "options": {
+            "public_body_or_public_services": {
+                "label": "I am a body governed by public law, or a private entity providing public services",
+                "obligations": [
+                    "Fundamental Rights Impact Assessment"
+                ],
+                "next": "END"
+            },
+            "annex_iii_5b_5c": {
+                "label": "I am a deployer of a high-risk AI system referred to in Annex III point 5(b) or 5(c)",
+                "obligations": [
+                    "Fundamental Rights Impact Assessment"
+                ],
+                "next": "END"
+            },
+            "none": {
+                "label": "None of the above",
+                "next": "END"
+            }
+        },
+        "legal_basis": [
+            "Article 27"
+        ]
+    }
+  }
+
