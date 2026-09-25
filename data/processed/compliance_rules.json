@@ -105,25 +105,39 @@
       "type": "multiple_choice",
       "options": {
         "civil_aviation_security": {
-          "label": "Civil aviation security"
+          "label": "Civil aviation security",
+          "status_changes": ["High risk"],
+          "next": "S1"
         },
         "two_three_wheel_vehicles": {
-          "label": "Two- or three-wheel vehicles and quadricycles"
+          "label": "Two- or three-wheel vehicles and quadricycles",
+          "status_changes": ["High risk"],
+          "next": "S1"
         },
         "agricultural_forestry_vehicles": {
-          "label": "Agricultural and forestry vehicles"
+          "label": "Agricultural and forestry vehicles",
+          "status_changes": ["High risk"],
+          "next": "S1"
         },
         "marine_equipment": {
-          "label": "Marine equipment"
+          "label": "Marine equipment",
+          "status_changes": ["High risk"],
+          "next": "S1"
         },
         "rail_interoperability": {
-          "label": "Interoperability of the rail systems"
+          "label": "Interoperability of the rail systems",
+          "status_changes": ["High risk"],
+          "next": "S1"
         },
         "motor_vehicles_trailers": {
-          "label": "Motor vehicles and their trailers"
+          "label": "Motor vehicles and their trailers",
+          "status_changes": ["High risk"],
+          "next": "S1"
         },
         "civil_aviation": {
-          "label": "Civil aviation"
+          "label": "Civil aviation",
+          "status_changes": ["High risk"],
+          "next": "S1"
         },
         "none": {
           "label": "None of the above",
@@ -313,6 +327,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "toys": {
@@ -321,6 +336,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "recreational_craft": {
@@ -329,6 +345,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "lifts": {
@@ -337,6 +354,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "explosive_atmospheres": {
@@ -345,6 +363,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "radio_equipment": {
@@ -353,6 +372,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "pressure_equipment": {
@@ -361,6 +381,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "cableway_installations": {
@@ -369,6 +390,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "personal_protective_equipment": {
@@ -377,6 +399,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "gas_appliances": {
@@ -385,6 +408,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "medical_devices": {
@@ -393,6 +417,7 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "in_vitro_diagnostic_medical_devices": {
@@ -401,15 +426,18 @@
                     "High risk",
                     "Become a Provider"
                 ],
+                "set_entity": "provider",
                 "next": "S1"
             },
             "none": {
                 "label": "None of the above",
+                "obligations": ["Product Manufacturer"],
                 "next": "END"
             }
         },
         "legal_basis": [
-            "Article 6 point 3",
+            "Article 25 point 3",
+            "Annex I",
             "Article 3 point 14"
         ],
         "guidance": [
@@ -426,7 +454,8 @@
                 "label": "I am placing on the market or putting into service AI systems in the EU",
                 "applies_to": [
                     "provider"
-                ]
+                ],
+                "next": "R2"
             },
             "gpai_eu_market": {
                 "label": "I am placing on the market General Purpose AI models in the EU",
@@ -439,13 +468,15 @@
                 "label": "I am established or located within the EU",
                 "applies_to": [
                     "deployer"
-                ]
+                ],
+                "next": "R2"
             },
             "importer_established_eu": {
                 "label": "I am established or located within the EU, and I am placing on the market an AI system that bears the name or trademark of somebody established outside of the EU",
                 "applies_to": [
                     "importer"
-                ]
+                ],
+                "next": "R2"
             },
             "output_used_eu": {
                 "label": "My AI system's output is used in the EU",
@@ -453,7 +484,8 @@
                     "provider",
                     "deployer",
                     "distributor"
-                ]
+                ],
+                "next": "R2"
             },
             "none": {
                 "label": "None of the above",
@@ -480,15 +512,8 @@
                 ],
                 "next": "R2"
             },
-            "compute_threshold": {
-                "label": "The cumulative amount of computation used for its training measured in floating point operations is greater than 10^25 FLOPs",
-                "status_changes": [
-                    "GPAI with systemic risk"
-                ],
-                "next": "R2"
-            },
             "commission_decision": {
-                "label": "The European Commission has decided that the model has capabilities or impact equivalent to those described above",
+                "label": "The European Commission has decided that the model has capabilities or impact equivalent to those described above based on the criteria set out in Annex XIII",
                 "status_changes": [
                     "GPAI with systemic risk"
                 ],
@@ -501,6 +526,9 @@
         },
         "legal_basis": [
             "Article 51"
+        ],
+        "guidance": [
+            "A General Purpose AI model is presumed to have high-impact capabilities when the cumulative amount of computation used for its training measured in floating point operations is greater than 10^25 FLOPs."
         ]
     },
 
@@ -509,33 +537,40 @@
         "question": "Do any of the following exclusions apply to your AI system or model?",
         "type": "multiple_choice",
         "options": {
-            "military_defence_national_security": {
-                "label": "The AI system is intended to be used exclusively for military, defence or national security purposes",
+            "military": {
+                "label": "The AI system is developed or used exclusively for military purposes",
                 "status_changes": [
-                    "Exception"
+                    "Excluded"
                 ],
                 "next": "END"
             },
-            "third_country_public_authority": {
-                "label": "The AI system is used by a public authority in a third country or by an international organisation under an international cooperation or law-enforcement agreement with the EU or a Member State, with adequate safeguards for fundamental rights and freedoms",
+            "third_country_public_authorities": {
+                "label": "The AI system is used by public authorities or international organisations in third countries in the framework of international cooperation or agreements for law enforcement and judicial cooperation with the EU or Member States",
                 "status_changes": [
-                    "Exception"
+                    "Excluded"
                 ],
                 "next": "END"
             },
-            "scientific_research_development": {
-                "label": "The AI system or model is specifically developed and put into service for the sole purpose of scientific research and development",
+            "research_and_development": {
+                "label": "The activity concerns AI research and development",
                 "status_changes": [
-                    "Exception"
+                    "Exclusion: Research"
                 ],
-                "next": "END"
+                "next": "R3"
             },
-            "research_testing_before_market": {
-                "label": "The activity concerns research, testing or development regarding AI systems or models before they are placed on the market or put into service, excluding testing in real-world conditions",
+            "open_source": {
+                "label": "The AI components are released under free and open-source licences",
                 "status_changes": [
-                    "Exception"
+                    "Exclusion: Open Source"
                 ],
-                "next": "END"
+                "next": "R3"
+            },
+            "personal_use": {
+                "label": "The AI system is used by a natural person in the course of a purely personal non-professional activity",
+                "status_changes": [
+                    "Exclusion: Personal Use"
+                ],
+                "next": "R3"
             },
             "none": {
                 "label": "None of the above",
@@ -573,7 +608,7 @@
                 ],
                 "next": "END"
             },
-            "criminal_risk_assessment": {
+            "predictive_policing": {
                 "label": "Assessment or prediction of the risk of a natural person committing a criminal offence",
                 "status_changes": [
                     "Prohibited AI Practice"
@@ -623,34 +658,48 @@
         "question": "Does your AI system fall within any of the following transparency categories?",
         "type": "multiple_choice",
         "options": {
-            "direct_interaction": {
-                "label": "The AI system is intended to interact directly with natural persons",
-                "obligations": [
-                    "Transparency"
-                ],
-                "next": "R5"
-            },
-            "synthetic_content": {
-                "label": "The AI system generates synthetic audio, image, video or text content",
-                "obligations": [
-                    "Transparency"
-                ],
-                "next": "R5"
-            },
-            "emotion_or_biometric": {
-                "label": "The AI system performs emotion recognition or biometric categorisation",
-                "obligations": [
-                    "Transparency"
-                ],
-                "next": "R5"
-            },
-            "deepfake_or_public_interest_text": {
-                "label": "The AI system generates or manipulates image, audio or video content constituting a deep fake, or generates or manipulates text published for the purpose of informing the public on matters of public interest",
-                "obligations": [
-                    "Transparency"
-                ],
-                "next": "R5"
-            },
+        "direct_interaction": {
+            "label": "The AI system is intended to interact directly with natural persons",
+            "applies_to": [
+                "provider"
+            ],
+            "obligations": [
+                "Transparency: Natural Persons"
+            ],
+            "next": "R5"
+        },
+        "synthetic_content": {
+            "label": "The AI system generates synthetic audio, image, video or text content",
+            "applies_to": [
+                "provider"
+            ],
+            "obligations": [
+                "Transparency: Synthetic Content"
+            ],
+            "next": "R5"
+        },
+        "emotion_or_biometric": {
+            "label": "The AI system performs emotion recognition or biometric categorisation",
+            "applies_to": [
+                "deployer"
+            ],
+            "obligations": [
+                "Transparency: Emotion & Biometric"
+            ],
+            "next": "R5"
+        },
+        "deepfake": {
+        "label": "The AI system generates or manipulates image, audio or video content constituting a deep fake",
+        "applies_to": ["deployer"],
+        "obligations": ["Transparency: Content Resemblance"],
+        "next": "R5"
+        },
+        "public_interest_text": {
+        "label": "The AI system generates or manipulates text published for the purpose of informing the public on matters of public interest",
+        "applies_to": ["deployer"],
+        "obligations": ["Transparency: Content Resemblance"],
+        "next": "R5"
+        },
             "none": {
                 "label": "None of the above",
                 "next": "R5"
@@ -663,31 +712,23 @@
 
     "R5": {
         "section": "Rules",
-        "question": "Do you meet any of the following criteria?",
-        "type": "multiple_choice",
+        "question": "Are you a body governed by public law, or a private entity providing public services?",
+        "type": "single_choice",
         "options": {
-            "public_body_or_public_services": {
-                "label": "I am a body governed by public law, or a private entity providing public services",
+            "yes": {
+                "label": "Yes",
                 "obligations": [
                     "Fundamental Rights Impact Assessment"
                 ],
                 "next": "END"
             },
-            "annex_iii_5b_5c": {
-                "label": "I am a deployer of a high-risk AI system referred to in Annex III point 5(b) or 5(c)",
-                "obligations": [
-                    "Fundamental Rights Impact Assessment"
-                ],
-                "next": "END"
-            },
-            "none": {
-                "label": "None of the above",
+            "no": {
+                "label": "No",
                 "next": "END"
             }
         },
         "legal_basis": [
-            "Article 27"
+            "Recital 96"
         ]
     }
   }
-
