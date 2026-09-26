@@ -543,3 +543,44 @@ def test_prohibited_ai_practice_terminates_at_r3():
 
     assert "Prohibited AI Practice" in state["status_changes"]
     assert determine_next("R3", selected, state) == "END"
+
+def test_hr5_non_high_risk_provider_gets_article_6_4_obligations():
+    rules = load_rules()
+
+    state = {
+        "answers": {},
+        "original_entity": "provider",
+        "current_entity": "provider",
+        "status_changes": [],
+        "obligations": ["AI Literacy"],
+        "legal_basis": [],
+    }
+
+    selected = [("no", rules["HR5"]["options"]["no"])]
+
+    update_state("HR5", selected, rules, state)
+
+    assert "Document Non-High-Risk Assessment" in state["obligations"]
+    assert "Register in EU Database" in state["obligations"]
+    assert "Article 6 point 3" in state["legal_basis"]
+
+def test_hr5_non_high_risk_deployer_does_not_get_provider_obligations():
+    rules = load_rules()
+
+    state = {
+        "answers": {},
+        "original_entity": "deployer",
+        "current_entity": "deployer",
+        "status_changes": [],
+        "obligations": ["AI Literacy"],
+        "legal_basis": [],
+    }
+
+    selected = [("no", rules["HR5"]["options"]["no"])]
+
+    update_state("HR5", selected, rules, state)
+
+    assert "Document Non-High-Risk Assessment" not in state["obligations"]
+    assert "Register in EU Database" not in state["obligations"]
+    assert "Article 6 point 3" in state["legal_basis"]
+    assert "Article 6 point 4" in state["legal_basis"]

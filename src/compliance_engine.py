@@ -159,10 +159,15 @@ def update_state(question_id, selected, rules, state):
 
         # Add obligations
         for obligation in option_data.get("obligations", []):
-            # "Notify NCA" applies only to Providers at HR5.
+            # Article 6(4) obligations apply only to Providers at HR5.
+            provider_only_hr5_obligations = {
+                "Document Non-High-Risk Assessment",
+                "Register in EU Database",
+            }
+
             if (
                 question_id == "HR5"
-                and obligation == "Notify NCA"
+                and obligation in provider_only_hr5_obligations
                 and state["current_entity"] != "provider"
             ):
                 continue
@@ -177,14 +182,6 @@ def update_state(question_id, selected, rules, state):
                 question_id == "E2"
                 and status_change == "Become a Provider"
                 and state["original_entity"] == "provider"
-            ):
-                continue
-
-            # "Notify NCA" applies only to Providers at HR5.
-            if (
-                question_id == "HR5"
-                and status_change == "Notify NCA"
-                and state["current_entity"] != "provider"
             ):
                 continue
 
