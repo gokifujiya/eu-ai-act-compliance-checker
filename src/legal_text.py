@@ -51,8 +51,13 @@ def find_article_page(article_number, pdf_path=DEFAULT_REGULATION_PATH):
 
 
 def clean_extracted_text(text):
-    """Remove PDF page-number artifacts from extracted legal text."""
+    """Remove common PDF extraction artifacts from legal text."""
     text = re.sub(r"(?m)^\s*\d{1,3}\s*$", "", text)
+    text = re.sub(
+        r"\b(D eployers|P aragraphs|P roviders|T he)\b",
+        lambda match: match.group(0).replace(" ", ""),
+        text,
+    )
     text = re.sub(r"\n{2,}", "\n", text)
     return text
 
@@ -148,27 +153,3 @@ def get_obligation_provision(
         "paragraph": paragraph_number,
         "text": text,
     }
-
-
-def test_article_50_obligation_provisions():
-    from src.legal_text import get_obligation_provision
-
-    expected = {
-        "Transparency: Natural Persons": "Article 50(1)",
-        "Transparency: Synthetic Content": "Article 50(2)",
-        "Transparency: Emotion & Biometric": "Article 50(3)",
-        "Transparency: Content Resemblance": "Article 50(4)",
-    }
-
-    for obligation, reference in expected.items():
-        provision = get_obligation_provision(obligation)
-
-        assert provision is not None
-        assert provision["reference"] == reference
-        assert provision["text"] is not None
-
-
-def test_unknown_obligation_has_no_provision():
-    from src.legal_text import get_obligation_provision
-
-    assert get_obligation_provision("Unknown Obligation") is None

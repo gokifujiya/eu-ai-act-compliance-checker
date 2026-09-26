@@ -47,6 +47,8 @@ def test_page_number_artifact_is_removed():
 
     assert "\n165\n" not in text
     assert "appropriate safeguards" in text
+    assert "D eployers" not in text
+    assert "Deployers" in text
 
 
 def test_article_50_obligation_provisions():
