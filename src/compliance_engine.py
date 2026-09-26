@@ -189,7 +189,12 @@ def update_state(question_id, selected, rules, state):
             if status_change not in state["status_changes"]:
                 state["status_changes"].append(status_change)
 
-    # Add legal references
+        # Add option-specific legal references
+        for source in option_data.get("legal_basis", []):
+            if source not in state["legal_basis"]:
+                state["legal_basis"].append(source)
+
+    # Add question-level legal references
     for source in rules[question_id].get("legal_basis", []):
         if source not in state["legal_basis"]:
             state["legal_basis"].append(source)

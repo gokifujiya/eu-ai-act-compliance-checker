@@ -579,6 +579,7 @@ def test_hr5_non_high_risk_provider_gets_article_6_4_obligations():
     assert "Document Non-High-Risk Assessment" in state["obligations"]
     assert "Register in EU Database" in state["obligations"]
     assert "Article 6 point 3" in state["legal_basis"]
+    assert "Article 6 point 4" in state["legal_basis"]
 
 
 def test_hr5_non_high_risk_deployer_does_not_get_provider_obligations():
@@ -601,6 +602,27 @@ def test_hr5_non_high_risk_deployer_does_not_get_provider_obligations():
     assert "Register in EU Database" not in state["obligations"]
     assert "Article 6 point 3" in state["legal_basis"]
     assert "Article 6 point 4" in state["legal_basis"]
+
+
+def test_hr5_high_risk_yes_does_not_add_article_6_4():
+    rules = load_rules()
+
+    state = {
+        "answers": {},
+        "original_entity": "deployer",
+        "current_entity": "deployer",
+        "status_changes": [],
+        "obligations": ["AI Literacy"],
+        "legal_basis": [],
+    }
+
+    selected = [("yes", rules["HR5"]["options"]["yes"])]
+
+    update_state("HR5", selected, rules, state)
+
+    assert "High risk" in state["status_changes"]
+    assert "Article 6 point 3" in state["legal_basis"]
+    assert "Article 6 point 4" not in state["legal_basis"]
 
 
 def test_print_state_shows_precise_legal_provision(capsys):

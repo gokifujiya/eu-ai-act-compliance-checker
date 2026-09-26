@@ -302,12 +302,14 @@
                     "Document Non-High-Risk Assessment",
                     "Register in EU Database"
                 ],
+                "legal_basis": [
+                    "Article 6 point 4"
+                ],
                 "next": "S1"
             }
         },
         "legal_basis": [
-            "Article 6 point 3",
-            "Article 6 point 4"
+            "Article 6 point 3"
         ],
         "guidance": [
             "The system does not pose a significant risk if it is intended to perform a narrow procedural task.",
