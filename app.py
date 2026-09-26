@@ -44,6 +44,24 @@ def get_question_data(question_id, state):
     return question_data
 
 
+def is_multiple_choice(question_id, question_data):
+    """Return whether the current filtered question allows multiple answers."""
+    if question_data["type"] != "multiple_choice":
+        return False
+
+    if question_id == "S1":
+        positive_options = [
+            key
+            for key in question_data["options"]
+            if key != "none"
+        ]
+
+        if len(positive_options) == 1:
+            return False
+
+    return True
+
+
 def render_question(state):
     """Render the current questionnaire node."""
     question_id = state["current_question"]
@@ -54,7 +72,7 @@ def render_question(state):
         for option_data in question_data["options"].values()
     ]
 
-    multiple = question_data["type"] == "multiple_choice"
+    multiple = is_multiple_choice(question_id, question_data)
 
     heading = (
         f"## {question_data['section']}\n"
@@ -65,16 +83,37 @@ def render_question(state):
 
     if guidance:
         heading += "\n\n**Guidance**\n"
-        heading += "\n".join(f"- {item}" for item in guidance)
+        heading += "\n".join(
+            f"- {item}" for item in guidance
+        )
+
+    if multiple:
+        radio_update = gr.update(
+            choices=[],
+            value=None,
+            visible=False,
+        )
+        checkbox_update = gr.update(
+            choices=options,
+            value=[],
+            visible=True,
+        )
+    else:
+        radio_update = gr.update(
+            choices=options,
+            value=None,
+            visible=True,
+        )
+        checkbox_update = gr.update(
+            choices=[],
+            value=[],
+            visible=False,
+        )
 
     return (
         heading,
-        gr.update(
-            choices=options,
-            value=[] if multiple else None,
-            multiselect=multiple,
-            visible=True,
-        ),
+        radio_update,
+        checkbox_update,
         gr.update(visible=True),
     )
 
@@ -157,7 +196,7 @@ def render_legal_evidence(state):
     return "## Legal Evidence\n\n" + "\n\n---\n\n".join(sections)
 
 
-def submit_answer(selection, state):
+def submit_answer(single_selection, multiple_selection, state):
     """Process one questionnaire answer and advance the assessment."""
     if state is None:
         state = new_state()
@@ -165,13 +204,17 @@ def submit_answer(selection, state):
     question_id = state["current_question"]
     question_data = get_question_data(question_id, state)
 
-    if not selection:
-        raise gr.Error("Please select at least one option.")
-
-    if isinstance(selection, str):
-        selected_labels = [selection]
+    if is_multiple_choice(question_id, question_data):
+        selected_labels = multiple_selection or []
     else:
-        selected_labels = selection
+        selected_labels = (
+            [single_selection]
+            if single_selection
+            else []
+        )
+
+    if not selected_labels:
+        raise gr.Error("Please select at least one option.")
 
     label_to_option = {
         option_data["label"]: (key, option_data)
@@ -211,6 +254,7 @@ def submit_answer(selection, state):
             "## Assessment complete",
             gr.update(visible=False),
             gr.update(visible=False),
+            gr.update(visible=False),
             render_result(state),
             render_legal_evidence(state),
         )
@@ -222,12 +266,13 @@ def submit_answer(selection, state):
 
     state["current_question"] = next_question
 
-    heading, choices, button = render_question(state)
+    heading, radio, checkboxes, button = render_question(state)
 
     return (
         state,
         heading,
-        choices,
+        radio,
+        checkboxes,
         button,
         render_result(state),
         render_legal_evidence(state),
@@ -238,12 +283,13 @@ def restart():
     """Restart the assessment."""
     state = new_state()
 
-    heading, choices, button = render_question(state)
+    heading, radio, checkboxes, button = render_question(state)
 
     return (
         state,
         heading,
-        choices,
+        radio,
+        checkboxes,
         button,
         "## Assessment\n\nComplete the questionnaire to see your result.",
         "## Legal Evidence\n\nRelevant statutory text will appear here.",
@@ -252,7 +298,9 @@ def restart():
 
 def main():
     initial_state = new_state()
-    heading, choices, button = render_question(initial_state)
+    heading, radio_update, checkbox_update, button = render_question(
+        initial_state
+    )
 
     theme = gr.themes.Soft(
         font=["Inter", "system-ui", "sans-serif"]
@@ -274,10 +322,18 @@ def main():
             with gr.Column(scale=1):
                 question = gr.Markdown(heading)
 
-                answer = gr.Dropdown(
-                    choices=choices["choices"],
-                    multiselect=choices["multiselect"],
-                    label="Select your answer",
+                single_answer = gr.Radio(
+                    choices=radio_update["choices"],
+                    value=None,
+                    label="Select one answer",
+                    visible=radio_update["visible"],
+                )
+
+                multiple_answer = gr.CheckboxGroup(
+                    choices=checkbox_update["choices"],
+                    value=[],
+                    label="Select one or more answers",
+                    visible=checkbox_update["visible"],
                 )
 
                 submit = gr.Button(
@@ -300,11 +356,16 @@ def main():
 
         submit.click(
             submit_answer,
-            inputs=[answer, state],
+            inputs=[
+                single_answer,
+                multiple_answer,
+                state,
+            ],
             outputs=[
                 state,
                 question,
-                answer,
+                single_answer,
+                multiple_answer,
                 submit,
                 result,
                 evidence,
@@ -316,7 +377,8 @@ def main():
             outputs=[
                 state,
                 question,
-                answer,
+                single_answer,
+                multiple_answer,
                 submit,
                 result,
                 evidence,

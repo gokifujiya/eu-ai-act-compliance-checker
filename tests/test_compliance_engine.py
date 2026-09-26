@@ -642,3 +642,48 @@ def test_print_state_shows_precise_legal_provision(capsys):
     assert "Transparency: Emotion & Biometric" in output
     assert "Legal provision: Article 50(3)" in output
     assert "emotion recognition system" in output
+
+
+def test_s1_distributor_has_article_2_1_d_scope():
+    rules = load_rules()
+
+    option = rules["S1"]["options"]["distributor_scope"]
+
+    assert "distributor" in option["applies_to"]
+    assert "Article 2 point 1(d)" in option["legal_basis"]
+    assert option["next"] == "R2"
+
+
+def test_s1_output_used_eu_does_not_apply_to_distributor():
+    rules = load_rules()
+
+    option = rules["S1"]["options"]["output_used_eu"]
+
+    assert "provider" in option["applies_to"]
+    assert "deployer" in option["applies_to"]
+    assert "distributor" not in option["applies_to"]
+
+
+def test_s1_operator_scope_routes_exist():
+    rules = load_rules()
+    options = rules["S1"]["options"]
+
+    expected = {
+        "importer_scope": ("importer", "Article 2 point 1(d)"),
+        "distributor_scope": ("distributor", "Article 2 point 1(d)"),
+        "product_manufacturer_scope": (
+            "product_manufacturer",
+            "Article 2 point 1(e)",
+        ),
+        "authorised_representative_scope": (
+            "authorised_representative",
+            "Article 2 point 1(f)",
+        ),
+    }
+
+    for option_key, (entity, legal_basis) in expected.items():
+        option = options[option_key]
+
+        assert entity in option["applies_to"]
+        assert legal_basis in option["legal_basis"]
+        assert option["next"] == "R2"

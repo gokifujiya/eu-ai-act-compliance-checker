@@ -452,43 +452,87 @@
 
     "S1": {
         "section": "Scope",
-        "question": "Do you meet any of the following criteria?",
+        "question": "Does the EU AI Act apply to you under any of the following territorial or operator criteria?",
         "type": "multiple_choice",
         "options": {
             "ai_system_eu_market": {
-                "label": "I am placing on the market or putting into service AI systems in the EU",
+                "label": "I place an AI system on the market or put an AI system into service in the EU",
                 "applies_to": [
                     "provider"
+                ],
+                "legal_basis": [
+                    "Article 2 point 1(a)"
                 ],
                 "next": "R2"
             },
             "gpai_eu_market": {
-                "label": "I am placing on the market General Purpose AI models in the EU",
+                "label": "I place a general-purpose AI model on the market in the EU",
                 "applies_to": [
                     "provider"
+                ],
+                "legal_basis": [
+                    "Article 2 point 1(a)"
                 ],
                 "next": "R1"
             },
             "deployer_established_eu": {
-                "label": "I am established or located within the EU",
+                "label": "I have my place of establishment or am located within the EU",
                 "applies_to": [
                     "deployer"
                 ],
-                "next": "R2"
-            },
-            "importer_established_eu": {
-                "label": "I am established or located within the EU, and I am placing on the market an AI system that bears the name or trademark of somebody established outside of the EU",
-                "applies_to": [
-                    "importer"
+                "legal_basis": [
+                    "Article 2 point 1(b)"
                 ],
                 "next": "R2"
             },
             "output_used_eu": {
-                "label": "My AI system's output is used in the EU",
+                "label": "I am established or located outside the EU, but the output produced by my AI system is used in the EU",
                 "applies_to": [
                     "provider",
-                    "deployer",
+                    "deployer"
+                ],
+                "legal_basis": [
+                    "Article 2 point 1(c)"
+                ],
+                "next": "R2"
+            },
+            "importer_scope": {
+                "label": "I am an importer of AI systems",
+                "applies_to": [
+                    "importer"
+                ],
+                "legal_basis": [
+                    "Article 2 point 1(d)"
+                ],
+                "next": "R2"
+            },
+            "distributor_scope": {
+                "label": "I am a distributor of AI systems",
+                "applies_to": [
                     "distributor"
+                ],
+                "legal_basis": [
+                    "Article 2 point 1(d)"
+                ],
+                "next": "R2"
+            },
+            "product_manufacturer_scope": {
+                "label": "I place on the market or put into service an AI system together with my product and under my own name or trademark",
+                "applies_to": [
+                    "product_manufacturer"
+                ],
+                "legal_basis": [
+                    "Article 2 point 1(e)"
+                ],
+                "next": "R2"
+            },
+            "authorised_representative_scope": {
+                "label": "I am the authorised representative of a provider that is not established in the EU",
+                "applies_to": [
+                    "authorised_representative"
+                ],
+                "legal_basis": [
+                    "Article 2 point 1(f)"
                 ],
                 "next": "R2"
             },
@@ -497,12 +541,12 @@
                 "status_changes": [
                     "Out of scope"
                 ],
+                "legal_basis": [
+                    "Article 2 point 1"
+                ],
                 "next": "END"
             }
-        },
-        "legal_basis": [
-            "Article 2"
-        ]
+        }
     },
 
     "R1": {
