@@ -1,6 +1,6 @@
 import json
 
-from src.compliance_engine import determine_next, update_state
+from src.compliance_engine import determine_next, print_state, update_state
 
 
 def load_rules():
@@ -45,6 +45,7 @@ def test_s1_gpai_precedence_is_order_independent():
         state,
     ) == "R1"
 
+
 def test_r2_complete_exclusion_precedence_is_order_independent():
     rules = load_rules()
     options = rules["R2"]["options"]
@@ -79,6 +80,7 @@ def test_r2_complete_exclusion_precedence_is_order_independent():
         state,
     ) == "END"
 
+
 def test_hr5_high_risk_deployer_remains_deployer():
     rules = load_rules()
 
@@ -105,6 +107,7 @@ def test_hr5_high_risk_deployer_remains_deployer():
     assert "Become a Provider" not in state["status_changes"]
     assert state["obligations"] == ["AI Literacy"]
 
+
 def test_hr6_none_preserves_product_manufacturer():
     rules = load_rules()
 
@@ -130,6 +133,7 @@ def test_hr6_none_preserves_product_manufacturer():
     assert state["status_changes"] == []
     assert state["obligations"] == ["Product Manufacturer"]
     assert determine_next("HR6", selected, state) == "END"
+
 
 def test_r4_only_high_risk_deployer_continues_to_r5():
     rules = load_rules()
@@ -183,6 +187,7 @@ def test_r4_only_high_risk_deployer_continues_to_r5():
         non_high_risk_state,
     ) == "END"
 
+
 def test_hr3_yes_converts_deployer_to_provider():
     rules = load_rules()
 
@@ -209,6 +214,7 @@ def test_hr3_yes_converts_deployer_to_provider():
     assert "Become a Provider" in state["status_changes"]
     assert "AI Literacy" in state["obligations"]
     assert determine_next("HR3", selected, state) == "S1"
+
 
 def test_hr1_high_risk_converts_deployer_to_provider():
     rules = load_rules()
@@ -237,6 +243,7 @@ def test_hr1_high_risk_converts_deployer_to_provider():
     assert "AI Literacy" in state["obligations"]
     assert determine_next("HR1", selected, state) == "S1"
 
+
 def test_e2_provider_modification_requires_handover():
     rules = load_rules()
 
@@ -263,6 +270,7 @@ def test_e2_provider_modification_requires_handover():
     assert "AI Literacy" in state["obligations"]
     assert "Become a Provider" not in state["status_changes"]
     assert determine_next("E2", selected, state) == "HR1"
+
 
 def test_e2_deployer_modification_becomes_provider():
     rules = load_rules()
@@ -291,6 +299,7 @@ def test_e2_deployer_modification_becomes_provider():
     assert "Handover" not in state["obligations"]
     assert determine_next("E2", selected, state) == "HR1"
 
+
 def test_high_risk_exception_blocks_r1_after_hr2_match():
     rules = load_rules()
 
@@ -315,6 +324,7 @@ def test_high_risk_exception_blocks_r1_after_hr2_match():
     assert determine_next("S1", selected, state) == "END"
     assert "High risk Exception" in state["status_changes"]
 
+
 def test_high_risk_exception_blocks_r1_after_hr6_match():
     rules = load_rules()
 
@@ -338,6 +348,7 @@ def test_high_risk_exception_blocks_r1_after_hr6_match():
 
     assert determine_next("S1", selected, state) == "END"
     assert "High risk Exception" in state["status_changes"]
+
 
 def test_provider_normal_path_reaches_r4():
     rules = load_rules()
@@ -391,6 +402,7 @@ def test_provider_normal_path_reaches_r4():
     update_state("R3", selected, rules, state)
     assert determine_next("R3", selected, state) == "R4"
 
+
 def test_high_risk_deployer_path_reaches_r5():
     rules = load_rules()
 
@@ -435,6 +447,7 @@ def test_high_risk_deployer_path_reaches_r5():
     assert determine_next("R4", selected, state) == "R5"
     assert "Transparency: Emotion & Biometric" in state["obligations"]
 
+
 def test_product_manufacturer_medical_device_becomes_provider():
     rules = load_rules()
 
@@ -471,6 +484,7 @@ def test_product_manufacturer_medical_device_becomes_provider():
     update_state("S1", selected, rules, state)
 
     assert determine_next("S1", selected, state) == "R2"
+
 
 def test_gpai_systemic_risk_path_continues_through_rules():
     rules = load_rules()
@@ -521,6 +535,7 @@ def test_gpai_systemic_risk_path_continues_through_rules():
     update_state("R4", selected, rules, state)
     assert determine_next("R4", selected, state) == "END"
 
+
 def test_prohibited_ai_practice_terminates_at_r3():
     rules = load_rules()
 
@@ -544,6 +559,7 @@ def test_prohibited_ai_practice_terminates_at_r3():
     assert "Prohibited AI Practice" in state["status_changes"]
     assert determine_next("R3", selected, state) == "END"
 
+
 def test_hr5_non_high_risk_provider_gets_article_6_4_obligations():
     rules = load_rules()
 
@@ -563,6 +579,7 @@ def test_hr5_non_high_risk_provider_gets_article_6_4_obligations():
     assert "Document Non-High-Risk Assessment" in state["obligations"]
     assert "Register in EU Database" in state["obligations"]
     assert "Article 6 point 3" in state["legal_basis"]
+
 
 def test_hr5_non_high_risk_deployer_does_not_get_provider_obligations():
     rules = load_rules()
@@ -584,3 +601,22 @@ def test_hr5_non_high_risk_deployer_does_not_get_provider_obligations():
     assert "Register in EU Database" not in state["obligations"]
     assert "Article 6 point 3" in state["legal_basis"]
     assert "Article 6 point 4" in state["legal_basis"]
+
+
+def test_print_state_shows_precise_legal_provision(capsys):
+    state = {
+        "answers": {"R4": ["emotion_or_biometric"]},
+        "original_entity": "deployer",
+        "current_entity": "deployer",
+        "status_changes": [],
+        "obligations": ["Transparency: Emotion & Biometric"],
+        "legal_basis": ["Article 50"],
+    }
+
+    print_state(state)
+
+    output = capsys.readouterr().out
+
+    assert "Transparency: Emotion & Biometric" in output
+    assert "Legal provision: Article 50(3)" in output
+    assert "emotion recognition system" in output

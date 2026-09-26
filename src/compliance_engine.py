@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from src.legal_text import get_obligation_provision
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -287,7 +288,16 @@ def print_state(state):
 
     if state["obligations"]:
         print("\nObligations:")
-        print("- " + "\n- ".join(state["obligations"]))
+
+        for obligation in state["obligations"]:
+            print(f"\n- {obligation}")
+
+            provision = get_obligation_provision(obligation)
+
+            if provision is not None:
+                print(f"  Legal provision: {provision['reference']}")
+                print("  Relevant text:")
+                print(provision["text"])
 
     if state["legal_basis"]:
         print("\nRelevant legal references:")
