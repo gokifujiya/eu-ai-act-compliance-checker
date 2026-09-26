@@ -286,18 +286,21 @@
 
     "HR5": {
         "section": "High Risk Status",
-        "question": "Does your AI system pose a significant risk of harm to the health, safety or fundamental rights of any person?",
+        "question": "Does the AI system materially influence the relevant decision-making, pose a significant risk of harm to health, safety or fundamental rights, or perform profiling of natural persons?",
         "type": "single_choice",
         "options": {
             "yes": {
-                "label": "Yes",
+                "label": "Yes — it poses a significant risk, materially influences decision-making, or performs profiling",
                 "status_changes": [
                     "High risk"
+                ],
+                "legal_basis": [
+                    "Article 6 point 3"
                 ],
                 "next": "S1"
             },
             "no": {
-                "label": "No",
+                "label": "No — its role is limited to one of the Article 6(3) exceptions described below",
                 "obligations": [
                     "Document Non-High-Risk Assessment",
                     "Register in EU Database"
@@ -312,10 +315,8 @@
             "Article 6 point 3"
         ],
         "guidance": [
-            "The system does not pose a significant risk if it is intended to perform a narrow procedural task.",
-            "The system does not pose a significant risk if it is intended to improve the result of a previously completed human activity.",
-            "The system does not pose a significant risk if it is intended to detect decision-making patterns or deviations from prior decision-making patterns and is not meant to replace or influence the previously completed human assessment without proper human review.",
-            "The system does not pose a significant risk if it is intended to perform a preparatory task to an assessment relevant for the purposes of the use cases listed in Annex III.",
+            "Because the system falls within an Annex III use case, it is normally considered high-risk. Article 6(3) provides a limited exception where the system does not pose a significant risk of harm to health, safety or fundamental rights, including by not materially influencing the outcome of decision-making.",
+            "Select No only if the system is limited to a narrow procedural task, improves the result of a previously completed human activity, detects decision-making patterns or deviations without replacing or improperly influencing the human assessment, or performs a preparatory task for an Annex III assessment.",
             "If the system performs profiling of natural persons, select Yes."
         ]
     },
