@@ -47,3 +47,27 @@ def test_page_number_artifact_is_removed():
 
     assert "\n165\n" not in text
     assert "appropriate safeguards" in text
+
+
+def test_article_50_obligation_provisions():
+    from src.legal_text import get_obligation_provision
+
+    expected = {
+        "Transparency: Natural Persons": "Article 50(1)",
+        "Transparency: Synthetic Content": "Article 50(2)",
+        "Transparency: Emotion & Biometric": "Article 50(3)",
+        "Transparency: Content Resemblance": "Article 50(4)",
+    }
+
+    for obligation, reference in expected.items():
+        provision = get_obligation_provision(obligation)
+
+        assert provision is not None
+        assert provision["reference"] == reference
+        assert provision["text"] is not None
+
+
+def test_unknown_obligation_has_no_provision():
+    from src.legal_text import get_obligation_provision
+
+    assert get_obligation_provision("Unknown Obligation") is None

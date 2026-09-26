@@ -10,6 +10,14 @@ DEFAULT_REGULATION_PATH = Path(
 )
 
 
+OBLIGATION_PROVISIONS = {
+    "Transparency: Natural Persons": (50, 1),
+    "Transparency: Synthetic Content": (50, 2),
+    "Transparency: Emotion & Biometric": (50, 3),
+    "Transparency: Content Resemblance": (50, 4),
+}
+
+
 @lru_cache(maxsize=1)
 def load_reader(pdf_path=DEFAULT_REGULATION_PATH):
     """Load and cache the EU AI Act PDF reader."""
@@ -115,3 +123,52 @@ def get_article_paragraph(
         return None
 
     return match.group(0).strip()
+
+
+def get_obligation_provision(
+    obligation,
+    pdf_path=DEFAULT_REGULATION_PATH,
+):
+    """Return the precise legal provision for a compliance obligation."""
+    provision = OBLIGATION_PROVISIONS.get(obligation)
+
+    if provision is None:
+        return None
+
+    article_number, paragraph_number = provision
+    text = get_article_paragraph(
+        article_number,
+        paragraph_number,
+        pdf_path,
+    )
+
+    return {
+        "reference": f"Article {article_number}({paragraph_number})",
+        "article": article_number,
+        "paragraph": paragraph_number,
+        "text": text,
+    }
+
+
+def test_article_50_obligation_provisions():
+    from src.legal_text import get_obligation_provision
+
+    expected = {
+        "Transparency: Natural Persons": "Article 50(1)",
+        "Transparency: Synthetic Content": "Article 50(2)",
+        "Transparency: Emotion & Biometric": "Article 50(3)",
+        "Transparency: Content Resemblance": "Article 50(4)",
+    }
+
+    for obligation, reference in expected.items():
+        provision = get_obligation_provision(obligation)
+
+        assert provision is not None
+        assert provision["reference"] == reference
+        assert provision["text"] is not None
+
+
+def test_unknown_obligation_has_no_provision():
+    from src.legal_text import get_obligation_provision
+
+    assert get_obligation_provision("Unknown Obligation") is None
