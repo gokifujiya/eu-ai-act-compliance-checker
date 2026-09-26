@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import gradio as gr
 
 from src.compliance_engine import (
@@ -21,6 +23,7 @@ def new_state():
         "obligations": [],
         "legal_basis": [],
         "current_question": "E1",
+        "history": [],
         "finished": False,
     }
 
@@ -233,6 +236,17 @@ def submit_answer(single_selection, multiple_selection, state):
             "'None of the above' cannot be combined with another option."
         )
 
+    state["history"].append(deepcopy({
+        "answers": state["answers"],
+        "original_entity": state["original_entity"],
+        "current_entity": state["current_entity"],
+        "status_changes": state["status_changes"],
+        "obligations": state["obligations"],
+        "legal_basis": state["legal_basis"],
+        "current_question": state["current_question"],
+        "finished": state["finished"],
+    }))
+
     update_state(
         question_id,
         selected,
@@ -265,6 +279,31 @@ def submit_answer(single_selection, multiple_selection, state):
         )
 
     state["current_question"] = next_question
+
+    heading, radio, checkboxes, button = render_question(state)
+
+    return (
+        state,
+        heading,
+        radio,
+        checkboxes,
+        button,
+        render_result(state),
+        render_legal_evidence(state),
+    )
+
+
+def go_back(state):
+    """Return to the previous questionnaire state."""
+    if state is None or not state.get("history"):
+        raise gr.Error("There is no previous question.")
+
+    history = state["history"]
+    previous_state = history.pop()
+
+    state = deepcopy(previous_state)
+    state["history"] = history
+    state["finished"] = False
 
     heading, radio, checkboxes, button = render_question(state)
 
@@ -341,7 +380,9 @@ def main():
                     variant="primary",
                 )
 
-                restart_button = gr.Button("Restart assessment")
+                with gr.Row():
+                    back_button = gr.Button("← Back")
+                    restart_button = gr.Button("Restart assessment")
 
             with gr.Column(scale=1):
                 result = gr.Markdown(
@@ -361,6 +402,20 @@ def main():
                 multiple_answer,
                 state,
             ],
+            outputs=[
+                state,
+                question,
+                single_answer,
+                multiple_answer,
+                submit,
+                result,
+                evidence,
+            ],
+        )
+
+        back_button.click(
+            go_back,
+            inputs=[state],
             outputs=[
                 state,
                 question,
