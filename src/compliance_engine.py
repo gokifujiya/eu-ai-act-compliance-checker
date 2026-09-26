@@ -262,19 +262,6 @@ def determine_next(question_id, selected, state):
         if "next" in option_data:
             next_question = option_data["next"]
 
-            # Before entering R1, check the flowchart's high-risk exception.
-            if next_question == "R1":
-                hr2_answers = state["answers"].get("HR2", [])
-                hr6_answers = state["answers"].get("HR6", [])
-
-                matched_hr2 = bool(hr2_answers) and "none" not in hr2_answers
-                matched_hr6 = bool(hr6_answers) and "none" not in hr6_answers
-
-                if matched_hr2 or matched_hr6:
-                    if "High risk Exception" not in state["status_changes"]:
-                        state["status_changes"].append("High risk Exception")
-                    return "END"
-
             # Only Providers and Deployers proceed to R4.
             if next_question == "R4":
                 if state["current_entity"] not in ("provider", "deployer"):

@@ -434,3 +434,112 @@ def test_high_risk_deployer_path_reaches_r5():
 
     assert determine_next("R4", selected, state) == "R5"
     assert "Transparency: Emotion & Biometric" in state["obligations"]
+
+def test_product_manufacturer_medical_device_becomes_provider():
+    rules = load_rules()
+
+    state = {
+        "answers": {},
+        "original_entity": "product_manufacturer",
+        "current_entity": "product_manufacturer",
+        "status_changes": [],
+        "obligations": [],
+        "legal_basis": [],
+    }
+
+    # HR6: AI system is a safety component of a medical device
+    selected = [
+        (
+            "medical_devices",
+            rules["HR6"]["options"]["medical_devices"],
+        )
+    ]
+    update_state("HR6", selected, rules, state)
+
+    assert state["current_entity"] == "provider"
+    assert "High risk" in state["status_changes"]
+    assert "Become a Provider" in state["status_changes"]
+    assert determine_next("HR6", selected, state) == "S1"
+
+    # S1 now uses Provider scope options
+    selected = [
+        (
+            "ai_system_eu_market",
+            rules["S1"]["options"]["ai_system_eu_market"],
+        )
+    ]
+    update_state("S1", selected, rules, state)
+
+    assert determine_next("S1", selected, state) == "R2"
+
+def test_gpai_systemic_risk_path_continues_through_rules():
+    rules = load_rules()
+
+    state = {
+        "answers": {},
+        "original_entity": "provider",
+        "current_entity": "provider",
+        "status_changes": [],
+        "obligations": ["AI Literacy"],
+        "legal_basis": [],
+    }
+
+    # S1: Provider places a GPAI model on the EU market
+    selected = [
+        (
+            "gpai_eu_market",
+            rules["S1"]["options"]["gpai_eu_market"],
+        )
+    ]
+    update_state("S1", selected, rules, state)
+    assert determine_next("S1", selected, state) == "R1"
+
+    # R1: GPAI model has high-impact capabilities
+    selected = [
+        (
+            "high_impact_capabilities",
+            rules["R1"]["options"]["high_impact_capabilities"],
+        )
+    ]
+    update_state("R1", selected, rules, state)
+
+    assert "GPAI with systemic risk" in state["status_changes"]
+    assert determine_next("R1", selected, state) == "R2"
+
+    # R2: no exclusion
+    selected = [("none", rules["R2"]["options"]["none"])]
+    update_state("R2", selected, rules, state)
+    assert determine_next("R2", selected, state) == "R3"
+
+    # R3: no prohibited practice
+    selected = [("none", rules["R3"]["options"]["none"])]
+    update_state("R3", selected, rules, state)
+    assert determine_next("R3", selected, state) == "R4"
+
+    # R4: no transparency category
+    selected = [("none", rules["R4"]["options"]["none"])]
+    update_state("R4", selected, rules, state)
+    assert determine_next("R4", selected, state) == "END"
+
+def test_prohibited_ai_practice_terminates_at_r3():
+    rules = load_rules()
+
+    state = {
+        "answers": {},
+        "original_entity": "provider",
+        "current_entity": "provider",
+        "status_changes": [],
+        "obligations": ["AI Literacy"],
+        "legal_basis": [],
+    }
+
+    selected = [
+        (
+            "social_scoring",
+            rules["R3"]["options"]["social_scoring"],
+        )
+    ]
+    update_state("R3", selected, rules, state)
+
+    assert "Prohibited AI Practice" in state["status_changes"]
+    assert determine_next("R3", selected, state) == "END"
