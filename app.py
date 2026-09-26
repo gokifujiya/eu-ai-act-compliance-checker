@@ -204,8 +204,8 @@ def render_legal_evidence(state):
     if not sections:
         return (
             "## Legal Evidence\n\n"
-            "*No paragraph-level statutory text is mapped "
-            "for the current obligations.*"
+            "*No specific obligation requiring paragraph-level legal evidence "
+            "was identified on this assessment path.*"
         )
 
     return "## Legal Evidence\n\n" + "\n\n---\n\n".join(sections)
