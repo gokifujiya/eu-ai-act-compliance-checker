@@ -123,6 +123,18 @@ def render_question(state):
 
 def render_result(state):
     """Create the final assessment report."""
+    if not (
+        state["original_entity"]
+        or state["current_entity"]
+        or state["status_changes"]
+        or state["obligations"]
+        or state["legal_basis"]
+    ):
+        return (
+            "## Assessment\n\n"
+            "Complete the questionnaire to see your result."
+        )
+
     lines = ["# Assessment Result"]
 
     if state["original_entity"]:
@@ -269,6 +281,7 @@ def submit_answer(single_selection, multiple_selection, state):
             gr.update(visible=False),
             gr.update(visible=False),
             gr.update(visible=False),
+            gr.update(visible=True),
             render_result(state),
             render_legal_evidence(state),
         )
@@ -288,6 +301,7 @@ def submit_answer(single_selection, multiple_selection, state):
         radio,
         checkboxes,
         button,
+        gr.update(visible=True),
         render_result(state),
         render_legal_evidence(state),
     )
@@ -313,6 +327,9 @@ def go_back(state):
         radio,
         checkboxes,
         button,
+        gr.update(
+            visible=state["current_question"] != "E1"
+        ),
         render_result(state),
         render_legal_evidence(state),
     )
@@ -330,6 +347,7 @@ def restart():
         radio,
         checkboxes,
         button,
+        gr.update(visible=False),
         "## Assessment\n\nComplete the questionnaire to see your result.",
         "## Legal Evidence\n\nRelevant statutory text will appear here.",
     )
@@ -381,7 +399,7 @@ def main():
                 )
 
                 with gr.Row():
-                    back_button = gr.Button("← Back")
+                    back_button = gr.Button("← Back", visible=False)
                     restart_button = gr.Button("Restart assessment")
 
             with gr.Column(scale=1):
@@ -408,6 +426,7 @@ def main():
                 single_answer,
                 multiple_answer,
                 submit,
+                back_button,
                 result,
                 evidence,
             ],
@@ -422,6 +441,7 @@ def main():
                 single_answer,
                 multiple_answer,
                 submit,
+                back_button,
                 result,
                 evidence,
             ],
@@ -435,6 +455,7 @@ def main():
                 single_answer,
                 multiple_answer,
                 submit,
+                back_button,
                 result,
                 evidence,
             ],
