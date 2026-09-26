@@ -11,6 +11,10 @@ DEFAULT_REGULATION_PATH = Path(
 
 
 OBLIGATION_PROVISIONS = {
+    "AI Literacy": (4, None),
+    "Document Non-High-Risk Assessment": (6, 4),
+    "Register in EU Database": (6, 4),
+    "Fundamental Rights Impact Assessment": (27, 1),
     "Transparency: Natural Persons": (50, 1),
     "Transparency: Synthetic Content": (50, 2),
     "Transparency: Emotion & Biometric": (50, 3),
@@ -77,6 +81,9 @@ def get_article_text(article_number, pdf_path=DEFAULT_REGULATION_PATH):
     next_article_pattern = re.compile(
         rf"(?m)^Article {article_number + 1}\s*$"
     )
+    structural_heading_pattern = re.compile(
+        r"(?m)^(?:CHAPTER|SECTION)\s+[IVXLC0-9]+\s*$"
+    )
 
     parts = []
 
@@ -94,9 +101,16 @@ def get_article_text(article_number, pdf_path=DEFAULT_REGULATION_PATH):
 
         # Stop at the next Article heading.
         next_match = next_article_pattern.search(text)
+        structural_match = structural_heading_pattern.search(text)
 
-        if next_match:
-            text = text[:next_match.start()]
+        stop_positions = [
+            match.start()
+            for match in (next_match, structural_match)
+            if match is not None
+        ]
+
+        if stop_positions:
+            text = text[:min(stop_positions)]
             parts.append(text)
             break
 
@@ -141,14 +155,23 @@ def get_obligation_provision(
         return None
 
     article_number, paragraph_number = provision
-    text = get_article_paragraph(
-        article_number,
-        paragraph_number,
-        pdf_path,
-    )
+
+    if paragraph_number is None:
+        text = get_article_text(
+            article_number,
+            pdf_path,
+        )
+        reference = f"Article {article_number}"
+    else:
+        text = get_article_paragraph(
+            article_number,
+            paragraph_number,
+            pdf_path,
+        )
+        reference = f"Article {article_number}({paragraph_number})"
 
     return {
-        "reference": f"Article {article_number}({paragraph_number})",
+        "reference": reference,
         "article": article_number,
         "paragraph": paragraph_number,
         "text": text,

@@ -1,4 +1,8 @@
-from src.legal_text import find_article_page, get_article_text
+from src.legal_text import (
+    find_article_page,
+    get_article_text,
+    get_obligation_provision,
+)
 
 
 def test_find_article_50_page():
@@ -73,3 +77,54 @@ def test_unknown_obligation_has_no_provision():
     from src.legal_text import get_obligation_provision
 
     assert get_obligation_provision("Unknown Obligation") is None
+
+
+def test_ai_literacy_uses_complete_article_4():
+    provision = get_obligation_provision("AI Literacy")
+
+    assert provision is not None
+    assert provision["reference"] == "Article 4"
+    assert provision["article"] == 4
+    assert provision["paragraph"] is None
+    assert "AI literacy" in provision["text"]
+
+
+def test_non_high_risk_assessment_uses_article_6_4():
+    provision = get_obligation_provision(
+        "Document Non-High-Risk Assessment"
+    )
+
+    assert provision is not None
+    assert provision["reference"] == "Article 6(4)"
+    assert provision["article"] == 6
+    assert provision["paragraph"] == 4
+    assert "document its assessment" in provision["text"]
+
+
+def test_eu_database_registration_uses_article_6_4():
+    provision = get_obligation_provision("Register in EU Database")
+
+    assert provision is not None
+    assert provision["reference"] == "Article 6(4)"
+    assert provision["article"] == 6
+    assert provision["paragraph"] == 4
+    assert "Article 49(2)" in provision["text"]
+
+
+def test_fundamental_rights_impact_assessment_uses_article_27_1():
+    provision = get_obligation_provision(
+        "Fundamental Rights Impact Assessment"
+    )
+
+    assert provision is not None
+    assert provision["reference"] == "Article 27(1)"
+    assert provision["article"] == 27
+    assert provision["paragraph"] == 1
+    assert "assessment of the impact on fundamental rights" in provision["text"]
+
+
+def test_article_4_does_not_include_next_chapter_heading():
+    text = get_article_text(4)
+
+    assert "CHAPTER II" not in text
+    assert "PROHIBITED AI PRACTICES" not in text
