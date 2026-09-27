@@ -202,11 +202,7 @@ def render_legal_evidence(state):
         )
 
     if not sections:
-        return (
-            "## Legal Evidence\n\n"
-            "*No specific obligation requiring paragraph-level legal evidence "
-            "was identified on this assessment path.*"
-        )
+        return ""
 
     return "## Legal Evidence\n\n" + "\n\n---\n\n".join(sections)
 
@@ -461,7 +457,10 @@ def main():
             ],
         )
 
-    app.launch(inbrowser=True)
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+    )
 
 
 if __name__ == "__main__":

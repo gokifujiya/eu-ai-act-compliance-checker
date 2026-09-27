@@ -116,6 +116,9 @@ eu-ai-act-compliance-checker/
 |
 |-- app.py
 |-- add_explanations.ps1
+|-- Dockerfile
+|-- .dockerignore
+|-- requirements.txt
 |-- README.md
 |-- LICENSE.txt
 |
@@ -235,6 +238,36 @@ The final assessment may display:
 - applicable obligations
 - relevant legal references
 - mapped statutory evidence
+
+## Docker
+
+The application can also be run in a Docker container.
+
+### Build the image
+
+From the project root:
+
+```bash
+docker build -t eu-ai-act-compliance-checker .
+```
+
+### Run the container
+
+```bash
+docker run --rm -p 7860:7860 eu-ai-act-compliance-checker
+```
+
+Then open:
+
+```text
+http://localhost:7860
+```
+
+The Gradio application will be available on port `7860`.
+
+### Stop the application
+
+Press `Ctrl+C` in the terminal running the container. Because the container is started with `--rm`, it is automatically removed after it stops.
 
 ## Design Principles
 
