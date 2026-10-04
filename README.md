@@ -2,6 +2,8 @@
 
 A rule-based preliminary compliance assessment tool for Regulation (EU) 2024/1689 (the EU AI Act), built with Python and Gradio.
 
+**Live Demo:** [EU AI Act Compliance Checker on Hugging Face Spaces](https://huggingface.co/spaces/gokifujiya/eu-ai-act-compliance-checker)
+
 The application guides users through a structured questionnaire, applies deterministic legal rules, identifies relevant classifications and obligations, and links assessment results to provisions of the EU AI Act.
 
 > **Disclaimer:** This project is intended as a preliminary compliance aid and does not constitute legal advice.
